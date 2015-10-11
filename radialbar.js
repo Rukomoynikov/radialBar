@@ -2,13 +2,14 @@ var _ = require("underscore");
 
 function RadialBar(options){
 	this.config = {
-		height: options.height || 200,
-		width: options.width || 200,
+		radius: options.radius || 100,
 		barWidth: options.barWidth || 20,
 		mainColor: options.mainColor || "blue",
 		backgroundColor: options.backgroundColor || "#383838",
 		domObj : options.domObj || 'body',
-		procent : options.procent || 100
+		procent : options.procent || 100,
+		showCaption : options.showCaption || true
+		// #TODO Add to center of bar text value procents, and show it as options enabled
 	};
 
 	this.config.domObj = document.querySelector(this.config.domObj);
@@ -21,8 +22,8 @@ function RadialBar(options){
 RadialBar.prototype.readyToDraw = function readyToDraw (){
 	this.container = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 	this.container.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
-	this.container.setAttribute('width', this.config.width)
-	this.container.setAttribute('height', this.config.height)
+	this.container.setAttribute('width', this.config.radius * 2)
+	this.container.setAttribute('height', this.config.radius * 2)
 	this.container.setAttribute('viewPort', '0 0 200 200')
 	this.container.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
 	this.container.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
@@ -30,24 +31,28 @@ RadialBar.prototype.readyToDraw = function readyToDraw (){
 
 	this.background_bar = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	this.background_bar.classList.add('background_bar');
-	this.background_bar.setAttribute('cx', this.config.width / 2)
-	this.background_bar.setAttribute('cy', this.config.width / 2)
-	this.background_bar.setAttribute('r', (this.config.width - this.config.barWidth) / 2)
+	this.background_bar.setAttribute('cx', this.config.radius)
+	this.background_bar.setAttribute('cy', this.config.radius)
+	this.background_bar.setAttribute('r', (this.config.radius - this.config.barWidth))
 	this.background_bar.style.fill =  'transparent';
 	this.background_bar.style.stroke = this.config.backgroundColor;
 	this.background_bar.style.strokeWidth = this.config.barWidth;
 
 	this.main_bar = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	this.main_bar.classList.add('main_bar');
-	this.main_bar.setAttribute('cx', this.config.width / 2)
-	this.main_bar.setAttribute('cy', this.config.width / 2)
-	this.main_bar.setAttribute('r', (this.config.width - this.config.barWidth) / 2)
+	this.main_bar.setAttribute('cx', this.config.radius)
+	this.main_bar.setAttribute('cy', this.config.radius)
+	this.main_bar.setAttribute('r', (this.config.radius - this.config.barWidth))
 	this.main_bar.style.fill =  'transparent';
 	this.main_bar.style.stroke = this.config.mainColor;
 	this.main_bar.style.strokeWidth = this.config.barWidth;
 
+	this.caption = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+	this.caption.innerText = this.procent;
+
 	this.container.appendChild(this.background_bar);
 	this.container.appendChild(this.main_bar);
+	this.container.appendChild(this.caption)
 
 	this.config.domObj.appendChild(this.container);
 

@@ -1,7 +1,5 @@
 var RadialBar = require("./radialbar");
 
-console.log(RadialBar);
-
 var radial90 = new RadialBar({
         domObj : '.oneSkill__radial--90',
         mainColor: '#3c989e',
@@ -29,4 +27,3 @@ var radial85 = new RadialBar({
         backgroundColor : '#c7c7c7',
         procent : 85
 });
-
